@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>HELLO</h1>
+<ul>
+    {% for hw in hardwares %}
+    <li>
+        <strong>{{ hw.name }}</strong>: <em>{{hw.desc}}</em>
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
