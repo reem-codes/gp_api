@@ -6,7 +6,8 @@ pip install flask
 export FLASK_APP=main.py
 flask run
 ```
-### week 2
+## week 2
+### part 1
 * make database -> postgresql
 * ORM -> sqlalchemy + migrate
 * config -> user pass db secret 
@@ -14,7 +15,12 @@ flask run
 * models.py
 * terminal
 
-# HOMEWORK
+### HOMEWORK
 * install python pip venv postgresql
 * book models
 * UI
+
+### part 2
+* make model
+* make constraints
+* get, post, put, delete, index
