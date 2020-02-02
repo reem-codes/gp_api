@@ -1,14 +1,10 @@
-from web import app, db
-from flask import jsonify, render_template, request
-from web.model import Hardware
+from web import app
+from flask import jsonify, request
+from web.model import Hardware, Configuration, Command, Schedule, Response
 from config import Config
 
 """
-INDEX
-POST
-GET
-PUT
-DELETE
+HARDWARE: REEM
 """
 @app.route("/hardware", methods=["GET"])
 def hardware_index():
@@ -41,27 +37,137 @@ def hardware_put(_id):
     return {"message": Config.PUT_MESSAGE, "object": obj}
 
 
-# thisdict = {
-#   "brand": "Ford",
-#   "model": "Mustang",
-#   "year": 1964
-# }
-#
-#
-# @app.route("/1")
-# def reem():
-#     x = thisdict["model"]
-#     return jsonify(x)
-#
-#
-# @app.route("/hardware")
-# def hardware_index():
-#     hardwares = Hardware.query.all()
-#     print(hardwares[0].name)
-#     return jsonify(hardwares)
-#
-#
-# @app.route("/")
-# def index():
-#     hardwares = Hardware.query.all()
-#     return render_template('index.html', hardwares=hardwares, title="testing hardware")
+"""
+CONFIGURATION: ABEER
+"""
+@app.route("/configuration", methods=["GET"])
+def configuration_index():
+    return jsonify(Configuration.index())
+
+
+@app.route("/configuration", methods=["POST"])
+def configuration_post():
+    body = request.get_json()
+    obj = Configuration.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/configuration/<_id>", methods=["GET"])
+def configuration_get(_id):
+    obj = Configuration.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/configuration/<_id>", methods=["DELETE"])
+def configuration_delete(_id):
+    Configuration.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/configuration/<_id>", methods=["PUT"])
+def configuration_put(_id):
+    body = request.get_json()
+    obj = Configuration.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+"""
+COMMAND: SARAH
+"""
+@app.route("/command", methods=["GET"])
+def command_index():
+    return jsonify(Command.index())
+
+
+@app.route("/command", methods=["POST"])
+def command_post():
+    body = request.get_json()
+    obj = Command.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/command/<_id>", methods=["GET"])
+def command_get(_id):
+    obj = Command.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/command/<_id>", methods=["DELETE"])
+def command_delete(_id):
+    Command.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/command/<_id>", methods=["PUT"])
+def command_put(_id):
+    body = request.get_json()
+    obj = Command.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+"""
+SCHEDULE: NOUF
+"""
+@app.route("/schedule", methods=["GET"])
+def schedule_index():
+    return jsonify(Schedule.index())
+
+
+@app.route("/schedule", methods=["POST"])
+def schedule_post():
+    body = request.get_json()
+    obj = Schedule.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/schedule/<_id>", methods=["GET"])
+def schedule_get(_id):
+    obj = Schedule.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/schedule/<_id>", methods=["DELETE"])
+def schedule_delete(_id):
+    Schedule.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/schedule/<_id>", methods=["PUT"])
+def schedule_put(_id):
+    body = request.get_json()
+    obj = Schedule.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+"""
+RESPONSE: MONA
+"""
+@app.route("/response", methods=["GET"])
+def response_index():
+    return jsonify(Response.index())
+
+
+@app.route("/response", methods=["POST"])
+def response_post():
+    body = request.get_json()
+    obj = Response.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/response/<_id>", methods=["GET"])
+def response_get(_id):
+    obj = Response.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/response/<_id>", methods=["DELETE"])
+def response_delete(_id):
+    Response.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/response/<_id>", methods=["PUT"])
+def response_put(_id):
+    body = request.get_json()
+    obj = Response.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
