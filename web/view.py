@@ -1,12 +1,30 @@
 from web import app
 from flask import jsonify, request
-from web.model import Hardware, Configuration, Command, Schedule, Response
+from web.model import Hardware, Configuration, Command, Schedule, Response, User
 from config import Config
+from flask_jwt_extended import jwt_required
+
+"""
+Each model has 5 routes accessing it:
+    - index: to GET all the rows of the table
+    - post: to add a new row in the database
+    - put: to edit an existing row
+    - delete: to delete an existing row
+    - get: to get one row of the database
+"""
+
+
+@app.route("/")
+def index():
+    return jsonify({"message": "hello :D"})
+
+
 
 """
 HARDWARE: REEM
 """
 @app.route("/hardware", methods=["GET"])
+@jwt_required
 def hardware_index():
     return jsonify(Hardware.index())
 
@@ -170,4 +188,40 @@ def response_delete(_id):
 def response_put(_id):
     body = request.get_json()
     obj = Response.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+
+"""
+USER: REEM
+"""
+@app.route("/user", methods=["GET"])
+def user_index():
+    return jsonify(User.index())
+
+
+@app.route("/user", methods=["POST"])
+def user_post():
+    body = request.get_json()
+    obj = User.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/user/<_id>", methods=["GET"])
+def user_get(_id):
+    obj = User.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/user/<_id>", methods=["DELETE"])
+def user_delete(_id):
+    User.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/user/<_id>", methods=["PUT"])
+@jwt_required
+def user_put(_id):
+    body = request.get_json()
+    obj = User.put({"id": _id}, body)
     return {"message": Config.PUT_MESSAGE, "object": obj}

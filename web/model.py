@@ -1,7 +1,14 @@
 """ORM=> Object Relational Mapping"""
-from web import db
+from web import db, bcrypt
 from dataclasses import dataclass
 from datetime import datetime
+import datetime as dt
+
+"""
+Each class represent a model i.e. a table in the database
+all of the models inherits from the Base class, which has the CRUD methods
+RevokedToken class is there for the logout token strings, part of the auth process
+"""
 
 
 class Base:
@@ -90,7 +97,7 @@ class Hardware(db.Model, Base):
 @dataclass
 class Command(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     hardware_id: int
     configuration_id: int
     schedule_id: int
@@ -112,7 +119,7 @@ class Schedule(db.Model, Base):
     time: str
 
     days = db.Column(db.Integer)
-    time = db.Column(db.Time)
+    time = db.Column(db.String)
 
 
 @dataclass
@@ -131,3 +138,65 @@ class Response(db.Model, Base):
     isRead = db.Column(db.Boolean)
 
     command_id = db.Column(db.Integer, db.ForeignKey('command.id', ondelete="cascade", onupdate="cascade"))
+
+
+@dataclass
+class User(db.Model, Base):
+    id: int
+    updateAt: str
+    email: str
+    password: str
+
+    email = db.Column(db.String, unique=True)
+    password = db.Column(db.String)
+
+    @classmethod
+    def post(cls, kw):
+        db.session.rollback()
+        kw['password'] = bcrypt.generate_password_hash(kw['password']).decode('utf-8')
+        obj = cls(**kw)
+        obj.updateAt = datetime.utcnow()
+        db.session.add(obj)
+        db.session.commit()
+        return obj
+
+    @classmethod
+    def put(cls, ids, kw):
+        obj = cls.query.filter_by(**ids).first_or_404()
+        for k in kw:
+            if k is 'password':
+                kw['password'] = bcrypt.generate_password_hash(kw['password']).decode('utf-8')
+                obj.__setattr__(k, kw[k])
+            else:
+                obj.__setattr__(k, kw[k])
+        obj.updateAt = datetime.utcnow()
+        db.session.commit()
+        return obj
+
+
+@dataclass
+class Raspberry(db.Model, Base):
+    id: int
+    updateAt: str
+    name: str
+
+    name = db.Column(db.String)
+
+
+@dataclass
+class RevokedToken(db.Model):
+    id: int
+    jti: str
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    jti = db.Column(db.String(120))
+
+    def add(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        query = cls.query.filter_by(jti=jti).first()
+        return bool(query)
+
+

@@ -1,4 +1,4 @@
-### Week 1
+## Week 1: intro and plan
 ```
 python pip venv
 python3 -m venv venv
@@ -6,7 +6,7 @@ pip install flask
 export FLASK_APP=main.py
 flask run
 ```
-## week 2
+## Week 2: rest api
 ### part 1
 * make database -> postgresql
 * ORM -> sqlalchemy + migrate
@@ -24,3 +24,17 @@ flask run
 * make model
 * make constraints
 * get, post, put, delete, index
+
+## Week 3: authentication
+* `pip install flask_jwt_extended flask_bcrypt`
+* config
+* model: user raspberry
+* user auth
+* routes
+
+
+# TODO
+* server user raspberry pi relationshipts
+
+
+
