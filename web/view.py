@@ -1,8 +1,8 @@
-from web import app
+from web import app, db
 from flask import jsonify, request
-from web.model import Hardware, Configuration, Command, Schedule, Response, User
+from web.model import Hardware, Configuration, Command, Schedule, Response, User, Raspberry, RaspberryUser
 from config import Config
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 """
 Each model has 5 routes accessing it:
@@ -24,7 +24,6 @@ def index():
 HARDWARE: REEM
 """
 @app.route("/hardware", methods=["GET"])
-@jwt_required
 def hardware_index():
     return jsonify(Hardware.index())
 
@@ -220,8 +219,54 @@ def user_delete(_id):
 
 
 @app.route("/user/<_id>", methods=["PUT"])
-@jwt_required
 def user_put(_id):
     body = request.get_json()
     obj = User.put({"id": _id}, body)
     return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+
+"""
+RASPBERRY: REEM
+"""
+@app.route("/raspberry", methods=["GET"])
+def raspberry_index():
+    return jsonify(Raspberry.index())
+
+
+@app.route("/raspberry", methods=["POST"])
+def raspberry_post():
+    body = request.get_json()
+    obj = Raspberry.post(body)
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/raspberry/<_id>", methods=["GET"])
+def raspberry_get(_id):
+    obj = Raspberry.get({"id": _id})
+    return jsonify(obj)
+
+
+@app.route("/raspberry/<_id>", methods=["DELETE"])
+def raspberry_delete(_id):
+    Raspberry.delete({"id": _id})
+    return {"message": Config.DELETE_MESSAGE}, 203
+
+
+@app.route("/raspberry/<_id>", methods=["PUT"])
+def raspberry_put(_id):
+    body = request.get_json()
+    obj = Raspberry.put({"id": _id}, body)
+    return {"message": Config.PUT_MESSAGE, "object": obj}
+
+
+@app.route("/raspberry_user", methods=["PUT"])
+@jwt_required
+def raspberry_user_put():
+    body = request.get_json()
+    obj = Raspberry.get({"id": body["raspberry_id"]})
+    user = User.get({"id": get_jwt_identity()})
+    user.raspberries.append(obj)
+    db.session.commit()
+
+    return {"message": Config.POST_MESSAGE, "object": obj}, 201

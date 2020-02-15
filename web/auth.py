@@ -32,7 +32,7 @@ def login():
 
     # Identity can be any data that is json serializable
     ret = {
-        'access_token': create_access_token(identity=email),
+        'access_token': create_access_token(identity=user.id),
     }
     return jsonify(ret), 200
 
@@ -57,10 +57,9 @@ def logout():
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(identity):
-    u = User.query.filter_by(email=identity).first_or_404()
-    # raspberries = u.raspberries
+    u = User.query.filter_by(id=identity).first_or_404()
+    raspberries = u.raspberries.all()
+    print(raspberries)
     return {
-        'raspberries': [
-            1, 2, 3
-        ]
+        'raspberries': raspberries
     }

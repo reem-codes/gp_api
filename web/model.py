@@ -13,7 +13,7 @@ RevokedToken class is there for the logout token strings, part of the auth proce
 
 class Base:
     id: int
-    updateAt: str
+    updateAt: datetime
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     updateAt = db.Column(db.DateTime, default=datetime.utcnow)
@@ -59,7 +59,7 @@ class Base:
 @dataclass
 class Configuration(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     name: str
     desc: str
     hardware_id: int
@@ -75,17 +75,22 @@ class Configuration(db.Model, Base):
 @dataclass
 class Hardware(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     name: str
     icon: str
     desc: str
     gpio: int
     status_id: int
+    raspberry_id: int
+    status: Configuration
+    is_on: bool
 
+    is_on = db.Column(db.Boolean)
     name = db.Column(db.String)
     icon = db.Column(db.String)
     desc = db.Column(db.Text)
     gpio = db.Column(db.Integer)
+    raspberry_id = db.Column(db.Integer, db.ForeignKey('raspberry.id', ondelete="cascade", onupdate="cascade"))
 
     commands = db.relationship("Command", backref="hardware", lazy='dynamic')
 
@@ -95,12 +100,24 @@ class Hardware(db.Model, Base):
 
 
 @dataclass
+class Schedule(db.Model, Base):
+    id: int
+    updateAt: datetime
+    days: int
+    time: str
+
+    days = db.Column(db.Integer)
+    time = db.Column(db.String)
+
+
+@dataclass
 class Command(db.Model, Base):
     id: int
     updateAt: datetime
     hardware_id: int
     configuration_id: int
     schedule_id: int
+    schedule: Schedule
 
     hardware_id = db.Column(db.Integer, db.ForeignKey('hardware.id', ondelete="cascade", onupdate="cascade"))
     configuration_id = db.Column(db.Integer, db.ForeignKey('configuration.id', ondelete="cascade", onupdate="cascade"))
@@ -111,21 +128,11 @@ class Command(db.Model, Base):
     responses = db.relationship("Response", backref="command", lazy='dynamic')
 
 
-@dataclass
-class Schedule(db.Model, Base):
-    id: int
-    updateAt: str
-    days: int
-    time: str
-
-    days = db.Column(db.Integer)
-    time = db.Column(db.String)
-
 
 @dataclass
 class Response(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     isDone: bool
     message: str
     executionTime: str
@@ -140,16 +147,25 @@ class Response(db.Model, Base):
     command_id = db.Column(db.Integer, db.ForeignKey('command.id', ondelete="cascade", onupdate="cascade"))
 
 
+RaspberryUser = db.Table(
+    'raspberry_user',
+    db.Column('raspberry_id', db.Integer, db.ForeignKey('raspberry.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.PrimaryKeyConstraint('raspberry_id', 'user_id')
+)
+
+
 @dataclass
 class User(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     email: str
     password: str
 
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
 
+    raspberries = db.relationship('Raspberry', secondary=RaspberryUser, back_populates='users', lazy='dynamic')
     @classmethod
     def post(cls, kw):
         db.session.rollback()
@@ -177,13 +193,14 @@ class User(db.Model, Base):
 @dataclass
 class Raspberry(db.Model, Base):
     id: int
-    updateAt: str
+    updateAt: datetime
     name: str
 
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=True)
+    hardwares = db.relationship("Hardware", backref="raspberry", lazy='dynamic')
+    users = db.relationship('User', secondary=RaspberryUser, back_populates='raspberries', lazy='joined')
 
 
-@dataclass
 class RevokedToken(db.Model):
     id: int
     jti: str
