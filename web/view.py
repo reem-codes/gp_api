@@ -1,6 +1,6 @@
 from web import app, db
 from flask import jsonify, request
-from web.model import Hardware, Configuration, Command, Schedule, Response, User, Raspberry, RaspberryUser
+from web.model import Hardware, Command, Schedule, Response, User, Raspberry, RaspberryUser
 from config import Config
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -24,11 +24,15 @@ def index():
 HARDWARE: REEM
 """
 @app.route("/hardware", methods=["GET"])
+@jwt_required
 def hardware_index():
-    return jsonify(Hardware.index())
+    raspberry = request.args.get('raspberry_id')
+    ids = {"raspberry_id": raspberry} if raspberry else {}
+    return jsonify(Hardware.index(ids))
 
 
 @app.route("/hardware", methods=["POST"])
+@jwt_required
 def hardware_post():
     body = request.get_json()
     obj = Hardware.post(body)
@@ -36,67 +40,85 @@ def hardware_post():
 
 
 @app.route("/hardware/<_id>", methods=["GET"])
+@jwt_required
 def hardware_get(_id):
-    obj = Hardware.get({"id": _id})
+    raspberry = request.args.get('raspberry_id')
+    ids = {"id": _id}
+    if raspberry:
+        ids["raspberry_id"] = raspberry
+    obj = Hardware.get(ids)
+
     return jsonify(obj)
 
 
 @app.route("/hardware/<_id>", methods=["DELETE"])
+@jwt_required
 def hardware_delete(_id):
     Hardware.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/hardware/<_id>", methods=["PUT"])
+@jwt_required
 def hardware_put(_id):
     body = request.get_json()
     obj = Hardware.put({"id": _id}, body)
     return {"message": Config.PUT_MESSAGE, "object": obj}
 
-
-"""
-CONFIGURATION: ABEER
-"""
-@app.route("/configuration", methods=["GET"])
-def configuration_index():
-    return jsonify(Configuration.index())
-
-
-@app.route("/configuration", methods=["POST"])
-def configuration_post():
-    body = request.get_json()
-    obj = Configuration.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
-
-
-@app.route("/configuration/<_id>", methods=["GET"])
-def configuration_get(_id):
-    obj = Configuration.get({"id": _id})
-    return jsonify(obj)
-
-
-@app.route("/configuration/<_id>", methods=["DELETE"])
-def configuration_delete(_id):
-    Configuration.delete({"id": _id})
-    return {"message": Config.DELETE_MESSAGE}, 203
-
-
-@app.route("/configuration/<_id>", methods=["PUT"])
-def configuration_put(_id):
-    body = request.get_json()
-    obj = Configuration.put({"id": _id}, body)
-    return {"message": Config.PUT_MESSAGE, "object": obj}
+#
+# """
+# CONFIGURATION: ABEER
+# """
+# @app.route("/configuration", methods=["GET"])
+# def configuration_index():
+#     return jsonify(Configuration.index())
+#
+#
+# @app.route("/configuration", methods=["POST"])
+# def configuration_post():
+#     body = request.get_json()
+#     obj = Configuration.post(body)
+#     return {"message": Config.POST_MESSAGE, "object": obj}, 201
+#
+#
+# @app.route("/configuration/<_id>", methods=["GET"])
+# def configuration_get(_id):
+#     obj = Configuration.get({"id": _id})
+#     return jsonify(obj)
+#
+#
+# @app.route("/configuration/<_id>", methods=["DELETE"])
+# def configuration_delete(_id):
+#     Configuration.delete({"id": _id})
+#     return {"message": Config.DELETE_MESSAGE}, 203
+#
+#
+# @app.route("/configuration/<_id>", methods=["PUT"])
+# def configuration_put(_id):
+#     body = request.get_json()
+#     obj = Configuration.put({"id": _id}, body)
+#     return {"message": Config.PUT_MESSAGE, "object": obj}
 
 
 """
 COMMAND: SARAH
 """
 @app.route("/command", methods=["GET"])
+@jwt_required
 def command_index():
-    return jsonify(Command.index())
+    ids = {}
+
+    raspberry = request.args.get('raspberry_id')
+    hardware = request.args.get('hardware_id')
+    if raspberry:
+        ids["raspberry_id"] = raspberry
+    if hardware:
+        ids["hardware_id"] = hardware
+    return jsonify(Command.index(ids))
 
 
 @app.route("/command", methods=["POST"])
+@jwt_required
 def command_post():
     body = request.get_json()
     obj = Command.post(body)
@@ -104,18 +126,28 @@ def command_post():
 
 
 @app.route("/command/<_id>", methods=["GET"])
+@jwt_required
 def command_get(_id):
-    obj = Command.get({"id": _id})
+    ids = {"id": _id}
+    raspberry = request.args.get('raspberry_id')
+    hardware = request.args.get('hardware_id')
+    if raspberry:
+        ids["raspberry_id"] = raspberry
+    if hardware:
+        ids["hardware_id"] = hardware
+    obj = Command.get(ids)
     return jsonify(obj)
 
 
 @app.route("/command/<_id>", methods=["DELETE"])
+@jwt_required
 def command_delete(_id):
     Command.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/command/<_id>", methods=["PUT"])
+@jwt_required
 def command_put(_id):
     body = request.get_json()
     obj = Command.put({"id": _id}, body)
@@ -126,11 +158,13 @@ def command_put(_id):
 SCHEDULE: NOUF
 """
 @app.route("/schedule", methods=["GET"])
+@jwt_required
 def schedule_index():
     return jsonify(Schedule.index())
 
 
 @app.route("/schedule", methods=["POST"])
+@jwt_required
 def schedule_post():
     body = request.get_json()
     obj = Schedule.post(body)
@@ -138,18 +172,21 @@ def schedule_post():
 
 
 @app.route("/schedule/<_id>", methods=["GET"])
+@jwt_required
 def schedule_get(_id):
     obj = Schedule.get({"id": _id})
     return jsonify(obj)
 
 
 @app.route("/schedule/<_id>", methods=["DELETE"])
+@jwt_required
 def schedule_delete(_id):
     Schedule.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/schedule/<_id>", methods=["PUT"])
+@jwt_required
 def schedule_put(_id):
     body = request.get_json()
     obj = Schedule.put({"id": _id}, body)
@@ -160,11 +197,14 @@ def schedule_put(_id):
 RESPONSE: MONA
 """
 @app.route("/response", methods=["GET"])
+@jwt_required
 def response_index():
-    return jsonify(Response.index())
+    ids = {"user_id": get_jwt_identity()}
+    return jsonify(Response.index(ids))
 
 
 @app.route("/response", methods=["POST"])
+@jwt_required
 def response_post():
     body = request.get_json()
     obj = Response.post(body)
@@ -172,18 +212,21 @@ def response_post():
 
 
 @app.route("/response/<_id>", methods=["GET"])
+@jwt_required
 def response_get(_id):
     obj = Response.get({"id": _id})
     return jsonify(obj)
 
 
 @app.route("/response/<_id>", methods=["DELETE"])
+@jwt_required
 def response_delete(_id):
     Response.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/response/<_id>", methods=["PUT"])
+@jwt_required
 def response_put(_id):
     body = request.get_json()
     obj = Response.put({"id": _id}, body)
@@ -195,8 +238,14 @@ def response_put(_id):
 USER: REEM
 """
 @app.route("/user", methods=["GET"])
+@jwt_required
 def user_index():
-    return jsonify(User.index())
+    raspberry_id = request.args.get('raspberry_id')
+    if raspberry_id:
+        obj = User.query.join(Raspberry, User.raspberries).filter(Raspberry.id == raspberry_id).all()
+        return jsonify(obj)
+    else:
+        return jsonify(User.index())
 
 
 @app.route("/user", methods=["POST"])
@@ -207,18 +256,21 @@ def user_post():
 
 
 @app.route("/user/<_id>", methods=["GET"])
+@jwt_required
 def user_get(_id):
     obj = User.get({"id": _id})
     return jsonify(obj)
 
 
 @app.route("/user/<_id>", methods=["DELETE"])
+@jwt_required
 def user_delete(_id):
     User.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/user/<_id>", methods=["PUT"])
+@jwt_required
 def user_put(_id):
     body = request.get_json()
     obj = User.put({"id": _id}, body)
@@ -230,8 +282,14 @@ def user_put(_id):
 RASPBERRY: REEM
 """
 @app.route("/raspberry", methods=["GET"])
+@jwt_required
 def raspberry_index():
-    return jsonify(Raspberry.index())
+    user_id = request.args.get('user_id')
+    if user_id:
+        obj = Raspberry.query.join(User, Raspberry.users).filter(User.id == user_id).all()
+        return jsonify(obj)
+    else:
+        return jsonify(Raspberry.index())
 
 
 @app.route("/raspberry", methods=["POST"])
@@ -242,18 +300,21 @@ def raspberry_post():
 
 
 @app.route("/raspberry/<_id>", methods=["GET"])
+@jwt_required
 def raspberry_get(_id):
     obj = Raspberry.get({"id": _id})
     return jsonify(obj)
 
 
 @app.route("/raspberry/<_id>", methods=["DELETE"])
+@jwt_required
 def raspberry_delete(_id):
     Raspberry.delete({"id": _id})
     return {"message": Config.DELETE_MESSAGE}, 203
 
 
 @app.route("/raspberry/<_id>", methods=["PUT"])
+@jwt_required
 def raspberry_put(_id):
     body = request.get_json()
     obj = Raspberry.put({"id": _id}, body)
@@ -268,5 +329,4 @@ def raspberry_user_put():
     user = User.get({"id": get_jwt_identity()})
     user.raspberries.append(obj)
     db.session.commit()
-
     return {"message": Config.POST_MESSAGE, "object": obj}, 201

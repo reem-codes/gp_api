@@ -35,6 +35,11 @@ flask run
 
 # TODO
 * server user raspberry pi relationshipts
+* get hardware -> return where user id = logged in
+* get raspberry -> return where user id = logged in
+* get command -> return where user id = logged in and raspberry is selected and hardware is selected
+* get response -> return where user id = logged
+
 
 
 
