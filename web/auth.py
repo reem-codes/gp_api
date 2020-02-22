@@ -38,6 +38,7 @@ def login():
         # Identity can be any data that is json serializable
         ret = {
             'access_token': create_access_token(identity=user.id),
+            'user': user
         }
         return jsonify(ret), 200
 
