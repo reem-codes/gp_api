@@ -378,3 +378,14 @@ def raspberry_user_put():
     user.raspberries.append(obj)
     db.session.commit()
     return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+
+@app.route("/raspberry_user", methods=["DELETE"])
+@jwt_required
+def raspberry_user_delete():
+    body = request.get_json()
+    obj = Raspberry.get({"id": body["raspberry_id"]})
+    user = User.get({"id": get_jwt_identity()})
+    user.raspberries.remove(obj)
+    db.session.commit()
+    return {"message": Config.DELETE_MESSAGE}, 203
