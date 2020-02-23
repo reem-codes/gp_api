@@ -148,7 +148,7 @@ def hardware_put(_id):
 COMMAND: SARAH
 """
 @app.route("/command", methods=["GET"])
-# @jwt_required
+@jwt_required
 def command_index():
     ids = {}
 
