@@ -5,6 +5,56 @@ from config import Config
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 """
+error handling
+"""
+
+
+@app.errorhandler(400)
+def error_400(error):
+    return jsonify({'message': '{}'.format(error)}), 400
+
+
+@app.errorhandler(401)
+def error_401(error):
+    return jsonify({'message': '{}'.format(error)}), 401
+
+
+@app.errorhandler(403)
+def error_403(error):
+    return jsonify({'message': '{}'.format(error)}), 403
+
+
+@app.errorhandler(405)
+def error_405(error):
+    return jsonify({'message': '{}'.format(error)}), 405
+
+
+@app.errorhandler(404)
+def error_404(error):
+    return jsonify({'message': '{}'.format(error)}), 404
+
+
+@app.errorhandler(409)
+def error_409(error):
+    return jsonify({'message': '{}'.format(error)}), 409
+
+
+@app.errorhandler(422)
+def error_422(error):
+    return jsonify({'message': '{}'.format(error)}), 422
+
+
+@app.errorhandler(500)
+def error_500(error):
+    return jsonify({'message': '{}'.format(error)}), 500
+
+
+@app.route("/")
+def index():
+    return jsonify({"message": "hello :D"})
+
+
+"""
 Each model has 5 routes accessing it:
     - index: to GET all the rows of the table
     - post: to add a new row in the database
@@ -12,12 +62,6 @@ Each model has 5 routes accessing it:
     - delete: to delete an existing row
     - get: to get one row of the database
 """
-
-
-@app.route("/")
-def index():
-    return jsonify({"message": "hello :D"})
-
 
 
 """
