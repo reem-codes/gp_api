@@ -159,9 +159,9 @@ def command_index():
         ids["raspberry_id"] = raspberry
     if hardware:
         ids["hardware_id"] = hardware
-    if schedule_id and schedule_id== "null":
-        ids["schedule_id"] = None
-
+    if schedule_id and schedule_id == "not_null":
+        print("no schedule")
+        return jsonify(Command.index(ids, True))
     return jsonify(Command.index(ids))
 
 

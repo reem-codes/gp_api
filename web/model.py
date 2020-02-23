@@ -119,6 +119,17 @@ class Command(db.Model, Base):
 
     responses = db.relationship("Response", backref="command", lazy='dynamic')
 
+    @classmethod
+    def index(cls, ids=None, schedule_not_null=False):
+        obj = cls.query
+        if ids:
+            obj = obj.filter_by(**ids)
+        if schedule_not_null:
+            print("inside not null")
+            obj = obj.filter(cls.schedule_id.isnot(None))
+        obj = obj.all()
+        return obj
+
 
 @dataclass
 class Response(db.Model, Base):
