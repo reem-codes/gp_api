@@ -148,16 +148,20 @@ def hardware_put(_id):
 COMMAND: SARAH
 """
 @app.route("/command", methods=["GET"])
-@jwt_required
+# @jwt_required
 def command_index():
     ids = {}
 
     raspberry = request.args.get('raspberry_id')
     hardware = request.args.get('hardware_id')
+    schedule_id = request.args.get('schedule_id')
     if raspberry:
         ids["raspberry_id"] = raspberry
     if hardware:
         ids["hardware_id"] = hardware
+    if schedule_id and schedule_id== "null":
+        ids["schedule_id"] = None
+
     return jsonify(Command.index(ids))
 
 
