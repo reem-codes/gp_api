@@ -151,7 +151,6 @@ COMMAND: SARAH
 @jwt_required
 def command_index():
     ids = {}
-
     raspberry = request.args.get('raspberry_id')
     hardware = request.args.get('hardware_id')
     schedule_id = request.args.get('schedule_id')
