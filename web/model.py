@@ -109,11 +109,9 @@ class Command(db.Model, Base):
     hardware_id: int
     configuration: bool
     schedule_id: int
-    raspberry_id: int
     schedule: Schedule
 
     hardware_id = db.Column(db.Integer, db.ForeignKey('hardware.id', ondelete="cascade", onupdate="cascade"))
-    raspberry_id = db.Column(db.Integer, db.ForeignKey('raspberry.id', ondelete="cascade", onupdate="cascade"))
 
     configuration = db.Column(db.Boolean)
 
@@ -168,7 +166,6 @@ class Raspberry(db.Model, Base):
 
     name = db.Column(db.String, nullable=True)
     hardwares = db.relationship("Hardware", backref="raspberry", lazy='dynamic')
-    commands = db.relationship("Command", backref="raspberry", lazy='dynamic')
     users = db.relationship('User', secondary=RaspberryUser, back_populates='raspberries', lazy='joined')
 
 
