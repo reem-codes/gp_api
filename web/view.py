@@ -247,7 +247,18 @@ RESPONSE: MONA
 @app.route("/response", methods=["GET"])
 @jwt_required
 def response_index():
-    return jsonify(Response.index())
+    obj = Response.query.join(Command)\
+        .join(Hardware).join(Raspberry) \
+        .join(User, Raspberry.users)\
+        .filter(User.id == get_jwt_identity())
+    r_obj = obj.all()
+    for response in obj:
+        command = Command.query.filter_by(id=response.command_id, schedule_id=None).first()
+        if command is not None:
+            db.session.delete(command)
+        db.session.delete(response)
+    db.session.commit()
+    return jsonify(r_obj)
 
 
 @app.route("/response", methods=["POST"])

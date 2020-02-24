@@ -149,6 +149,9 @@ class Response(db.Model, Base):
 
     command_id = db.Column(db.Integer, db.ForeignKey('command.id', ondelete="cascade", onupdate="cascade"))
 
+    def __hash__(self):
+        return hash(self.id)
+
 
 RaspberryUser = db.Table(
     'raspberry_user',
