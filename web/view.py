@@ -247,8 +247,7 @@ RESPONSE: MONA
 @app.route("/response", methods=["GET"])
 @jwt_required
 def response_index():
-    ids = {"user_id": get_jwt_identity()}
-    return jsonify(Response.index(ids))
+    return jsonify(Response.index())
 
 
 @app.route("/response", methods=["POST"])
