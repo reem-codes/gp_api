@@ -90,6 +90,9 @@ class Hardware(db.Model, Base):
     commands = db.relationship("Command", backref="hardware", lazy='dynamic')
     status = db.Column(db.Boolean)
 
+    def __hash__(self):
+        return hash(self.id)
+
 
 @dataclass
 class Schedule(db.Model, Base):
@@ -100,6 +103,9 @@ class Schedule(db.Model, Base):
 
     days = db.Column(db.Integer)
     time = db.Column(db.String)
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 @dataclass
@@ -130,6 +136,9 @@ class Command(db.Model, Base):
             obj = obj.filter(cls.schedule_id.isnot(None))
         obj = obj.all()
         return obj
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 @dataclass
@@ -170,6 +179,9 @@ class Raspberry(db.Model, Base):
     name = db.Column(db.String, nullable=True)
     hardwares = db.relationship("Hardware", backref="raspberry", lazy='dynamic')
     users = db.relationship('User', secondary=RaspberryUser, back_populates='raspberries', lazy='joined')
+
+    def __hash__(self):
+        return hash(self.id)
 
 
 class RevokedToken(db.Model):
@@ -222,3 +234,5 @@ class User(db.Model, Base):
         db.session.commit()
         return obj
 
+    def __hash__(self):
+        return hash(self.id)
