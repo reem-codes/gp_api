@@ -3,6 +3,7 @@ from flask import jsonify, request
 from web.model import Hardware, Command, Schedule, Response, User, Raspberry, RaspberryUser
 from config import Config
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy import or_
 
 """
 error handling
@@ -156,9 +157,9 @@ def command_index():
     schedule_id = request.args.get('schedule_id')
     if raspberry:
         obj = Command.query.join(Hardware).\
-                            join(Response).\
+                            outerjoin(Response, Response.command_id==Command.id).\
                             filter(Hardware.raspberry_id==raspberry # first only return command for certain raspberry
-                                   and Response.isDone == False
+                                    ,or_(Response.isDone==None, Response.isDone==False)
                                    ).all()
         return jsonify(obj)
     if hardware:
