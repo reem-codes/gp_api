@@ -155,7 +155,11 @@ def command_index():
     hardware = request.args.get('hardware_id')
     schedule_id = request.args.get('schedule_id')
     if raspberry:
-        obj = Command.query.join(Hardware).filter(Hardware.raspberry_id==raspberry).all()
+        obj = Command.query.join(Hardware).\
+                            join(Response).\
+                            filter(Hardware.raspberry_id==raspberry # first only return command for certain raspberry
+                                   and Response.isDone == False
+                                   ).all()
         return jsonify(obj)
     if hardware:
         ids["hardware_id"] = hardware
