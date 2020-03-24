@@ -1,5 +1,7 @@
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
+
 from web import app, db
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from web.model import Hardware, Command, Schedule, Response, User, Raspberry, RaspberryUser
 from config import Config
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -52,7 +54,14 @@ def error_500(error):
 
 @app.route("/")
 def index():
+    # return render_template("actual_main.html")
     return jsonify({"message": "hello :D"})
+
+
+# @app.route("/l")
+# def ll():
+#     return render_template("login.html")
+    # return jsonify({"message": "hello :D"})
 
 
 """
@@ -79,9 +88,16 @@ def hardware_index():
 @app.route("/hardware", methods=["POST"])
 @jwt_required
 def hardware_post():
-    body = request.get_json()
-    obj = Hardware.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = Hardware.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/hardware/<_id>", methods=["GET"])
@@ -173,9 +189,15 @@ def command_index():
 @app.route("/command", methods=["POST"])
 @jwt_required
 def command_post():
-    body = request.get_json()
-    obj = Command.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = Command.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/command/<_id>", methods=["GET"])
@@ -219,9 +241,15 @@ def schedule_index():
 @app.route("/schedule", methods=["POST"])
 @jwt_required
 def schedule_post():
-    body = request.get_json()
-    obj = Schedule.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = Schedule.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/schedule/<_id>", methods=["GET"])
@@ -269,9 +297,15 @@ def response_index():
 @app.route("/response", methods=["POST"])
 @jwt_required
 def response_post():
-    body = request.get_json()
-    obj = Response.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = Response.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/response/<_id>", methods=["GET"])
@@ -313,9 +347,15 @@ def user_index():
 
 @app.route("/user", methods=["POST"])
 def user_post():
-    body = request.get_json()
-    obj = User.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = User.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/user/<_id>", methods=["GET"])
@@ -357,9 +397,15 @@ def raspberry_index():
 
 @app.route("/raspberry", methods=["POST"])
 def raspberry_post():
-    body = request.get_json()
-    obj = Raspberry.post(body)
-    return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    try:
+        body = request.get_json()
+        obj = Raspberry.post(body)
+        return {"message": Config.POST_MESSAGE, "object": obj}, 201
+    except InvalidRequestError:
+        db.session().rollback()
+        return jsonify({'message': 'an invalid request'}), 409
+    except IntegrityError:
+        return jsonify({'message': 'an integrity error occurred'}), 409
 
 
 @app.route("/raspberry/<_id>", methods=["GET"])
