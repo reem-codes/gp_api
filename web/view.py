@@ -58,9 +58,9 @@ def index():
     return jsonify({"message": "hello :D"})
 
 
-# @app.route("/l")
-# def ll():
-#     return render_template("login.html")
+@app.route("/privacy_policy")
+def privacy():
+    return render_template("privacy_policy.html")
     # return jsonify({"message": "hello :D"})
 
 
