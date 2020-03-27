@@ -3,12 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/css.css')}}" />
 </head>
 <body>
-<h1>I am header</h1>
-<ul>
-    {% block main %}{%endblock%}
-</ul>
-<h2>I am footer</h2>
+<header>
+    <nav>
+        <a href="#about">about</a>
+        <a href="#methodology">methodology</a>
+        <a href="#gallery">gallery</a>
+        <a href="#deliverable">deliverable</a>
+        <a href="#people">people</a>
+
+    </nav>
+    <section>
+        <div class="img">
+            <img src="{{url_for('static', filename='media/logo.png')}}" />
+        </div>
+        <div>
+            <h1>my smart home</h1>
+            <p id="about">This is my graduation project. It is a smart home control system using raspberry pi.</p>
+        </div>
+    </section>
+    <svg viewbox="0 0 100 25">
+        <path fill="#97D0C0" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
+        <path fill="#97D0C0" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
+    </svg>
+</header>
+<section id="methodology">
+    <h1>Methodology</h1>
+    <div class="wrapper">
+        <article>
+            <div class="img"><img src="{{url_for('static', filename='media/pic2.jpg')}}" /></div>
+            <div>
+                <h2>Android Application</h2>
+                <a href="https://github.com/reem-codes/gp_android">
+                    <ion-icon name="logo-github"></ion-icon>
+                </a>
+            </div>
+            <p>This mobile application works as the user interface. Its main job is sending requests and recieving responses from the server</p>
+        </article>
+        <article>
+            <div class="img"><img src="{{url_for('static', filename='media/raspberry_P.png')}}" /></div>
+            <div>
+                <h2>Raspberry Pi</h2>
+                <a href="https://github.com/reem-codes/gp_rp">
+                    <ion-icon name="logo-github"></ion-icon>
+                </a>
+            </div>
+
+            <p>This script is installed in any raspberry pi's device. Upon running, the script first check if the raspberry has been registered to the server then logs in. Otherwise, it connects to the server to register. After that, it keeps checking for new commands to execute them.</p>
+        </article>
+        <article>
+            <div class="img"><img src="{{url_for('static', filename='media/server.png')}}" /></div>
+            <div>
+                <h2>Web Application</h2>
+                <a href="https://github.com/reem-codes/gp_api">
+                    <ion-icon name="logo-github"></ion-icon>
+                </a>
+            </div>
+            <p>This is a REST API web application for managing communication between the androind application and the raspberry pi script. </p>
+        </article>
+    </div>
+</section>
+<svg style="transform: rotate(180deg)" viewbox="0 0 100 25">
+    <path fill="#97D0C0" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
+    <path fill="#97D0C0" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
+</svg>
+<section id="gallery">
+    <h1>Gallery</h1>
+    <div class="gallery-wrapper">
+        <img src="{{url_for('static', filename='media/output_login.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_raspberry_list.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_hardware_list.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_hardware_new.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_command_list.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_command_new.jpg')}}" />
+        <img src="{{url_for('static', filename='media/output_schedule.jpg')}}" />
+        <img src="{{url_for('static', filename='media/connect.jpg')}}" />
+        <img src="{{url_for('static', filename='media/IMG-20200229-WA0003.jpg')}}" />
+    </div>
+</section>
+
+<section id="deliverable">
+    <h1>Deliverable</h1>
+    <div class="wrapper">
+        <article onclick="window.location='https://github.com/reem-codes/gp/raw/master/paper.pdf';">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <h2>
+                scientific paper
+            </h2>
+        </article>
+        <article onclick="window.location='https://github.com/reem-codes/gp/raw/master/gp-presentation.pdf';">
+            <ion-icon name="albums-outline"></ion-icon>
+            <h2>
+                slide show
+            </h2>
+        </article>
+        <article onclick="window.location='https://github.com/reem-codes/gp/raw/master/report-GPI.pdf';">
+            <ion-icon name="book-outline"></ion-icon>
+            <h2>
+                report
+            </h2>
+        </article>
+        <article onclick="window.location='https://github.com/reem-codes/gp_android/raw/master/app/release/app-release.apk';">
+            <ion-icon name="logo-android"></ion-icon>
+            <h2>
+                android application
+            </h2>
+        </article>
+        <article onclick="window.location='https://github.com/reem-codes/gp_rp';">
+            <ion-icon name="code-download-outline"></ion-icon>
+            <h2>
+                raspberry pi console application
+            </h2>
+        </article>
+        <article onclick="window.location='/';">
+            <ion-icon name="server-outline"></ion-icon>
+            <h2>
+                web application
+            </h2>
+        </article>
+    </div>
+</section>
+<footer>
+    <h1 id="people">This project is made by</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>Reem Ali</td><td>reem.ali2606@gmail.com</td>
+        </tr>
+        <tr>
+            <td>Abeer Ezzat</td><td>abeeraaezzat@gmail.com</td>
+        </tr>
+        <tr>
+            <td>Nouf AlDajani</td><td>noufaldeajani@gmail.com</td>
+        </tr>
+        <tr>
+            <td>Mona AlKhathlan</td><td>monaalsbi3y@gmail.com</td>
+        </tr>
+        <tr>
+            <td>Doha AlZouhbi</td><td>dalzouhbi@gmail.com</td>
+        </tr>
+        <tr>
+            <td>Sarah AlHussain</td><td>sarakalhussain@hotmail.com</td>
+        </tr>
+    </table>
+
+    <p>&copy;{{now.year}} <a href="https://reem-codes.com">reem-codes</a>. All rights reserved.</p>
+</footer>
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 </body>
 </html>

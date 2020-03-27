@@ -6,7 +6,7 @@ from web.model import Hardware, Command, Schedule, Response, User, Raspberry, Ra
 from config import Config
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import or_
-
+import datetime
 """
 error handling
 """
@@ -54,8 +54,8 @@ def error_500(error):
 
 @app.route("/")
 def index():
-    # return render_template("actual_main.html")
-    return jsonify({"message": "hello :D"})
+    return render_template("index.html", title="My Smart Home", now=datetime.datetime.utcnow())
+    # return jsonify({"message": "hello :D"})
 
 
 @app.route("/privacy_policy")

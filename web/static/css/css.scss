@@ -1,0 +1,271 @@
+$green: #97D0C0;
+$pink: #EF9A9A;
+$faintPink: #FEF9F9;
+$white: #fefefe;
+$black: #202020;
+$gray: #D3D3D3;
+$darkGreen: #3E7767;
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+* {
+  background: none;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  color: $black;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1{
+  color: $pink;
+  margin : 1rem auto;
+  padding: 1rem 0;
+  font-size: 2rem;
+}
+
+h2{
+  color: $green;
+}
+h1, h2{
+  text-transform: capitalize;
+}
+nav {
+  text-align: right;
+  padding: 1rem;
+  a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 1rem;
+    margin-right: 2rem;
+    border: 1px solid transparent;
+    border-right: none;
+    border-left: none;
+    border-radius: 3rem;
+    text-transform: capitalize;
+    &:hover, &:active {
+      border-color: $green;
+    }
+  }
+}
+header {
+  section {
+    padding: 0 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .img {
+      img{
+        max-width: 100%;
+      }
+    }
+    div {
+      max-width: 800px;
+    }
+  }
+}
+#methodology{
+  margin: 0;
+  padding-bottom: 2rem;
+  background: $green;
+  h1{
+    color: $white;
+    margin : 0 auto;
+    padding: 1rem 0;
+  }
+  .wrapper{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1500px;
+    margin: 1rem auto;
+    article {
+      background: $white;
+      max-width: 400px;
+      border-radius: 3rem;
+      margin: 1rem;
+      padding: 1rem;
+      .img {
+        max-width: 300px;
+        height: 400px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        img {
+          display: block;
+          max-width: 100%;
+        }
+      }
+      p, div, h2 {
+        padding: 1rem;
+      }
+      h2 {
+        text-align: center;
+      }
+      div {
+        padding:0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: row-reverse;
+        * {
+          margin: 0;
+          padding: .5rem .25rem;
+        }
+      }
+    }
+  }
+}
+#gallery {
+  padding-bottom: 3rem;
+  .gallery-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    img {
+      width: 300px;
+      margin: .5rem;
+    }
+  }
+}
+
+#deliverable {
+  background: $black;
+  color: $white;
+  padding: 3rem 0;
+  .wrapper{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    article{
+      border-radius: 3rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid $white;
+      //border-right: none;
+      //border-left: none;
+      width: 250px;
+      margin: 1rem;
+      height: 250px;
+
+      * {
+        margin: 1rem 0;
+      }
+      ion-icon {
+        color: $pink;
+      }
+      &:hover, &:active {
+        background: $white;
+        cursor: pointer;
+        ion-icon {
+          color: $green;
+          font-size: 3rem;
+        }
+        h2 {
+          color: $black;
+        }
+      }
+    }
+  }
+}
+footer {
+  padding-top: 3rem;
+  h1 {
+    color: $green;
+  }
+  table{
+    margin: 1rem auto;
+    border-collapse: collapse;
+    overflow-x: scroll;
+    tr, th, td {
+      padding: .5rem;
+      text-align: center;
+
+    }
+    td {
+      border: 2px solid #f1f3f2;
+      &:last-child {
+        border-right: 0;
+      }
+      &:first-child {
+        border-left: 0;
+      }
+
+
+    }
+
+
+    tr {
+      &:nth-child(even) {
+        background-color: #f1f3f2;
+      }
+      &:first-child td {
+        border-top: 0;
+      }
+
+      &:last-child td {
+        border-bottom: 0;
+      }
+      &:hover{
+        background-color: #dcdedd;
+        border-color: #dcdedd;
+        td{
+          border-color: #dcdedd;
+        }
+      }
+
+    }
+    thead, thead * {
+      border: none;
+      border-bottom: 3px solid #f1f3f2;
+    }
+
+  }
+  p {
+    padding: 1rem 0;
+  }
+}
+ion-icon {
+  font-size: 2em;
+}
+svg {
+  background-size: cover;
+  width: 100%;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+
+@media screen and (width < 850px) {
+  nav {
+    margin: 0 auto;
+    padding: 1rem 0;
+    text-align: center;
+    a {
+      padding: .5rem;
+      margin: .25rem;
+
+    }
+  }
+  header {
+    section {
+      padding: 0 1rem;
+    }
+  }
+
+}
