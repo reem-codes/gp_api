@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/css.css')}}" />
+
 </head>
 <body>
 <header>
+
+    <div class="container-display" id="display-menu">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
     <nav>
         <a href="#about">about</a>
         <a href="#methodology">methodology</a>
@@ -44,6 +52,16 @@
             <p>This mobile application works as the user interface. Its main job is sending requests and recieving responses from the server</p>
         </article>
         <article>
+            <div class="img"><img src="{{url_for('static', filename='media/server.png')}}" /></div>
+            <div>
+                <h2>Web Application</h2>
+                <a href="https://github.com/reem-codes/gp_api">
+                    <ion-icon name="logo-github"></ion-icon>
+                </a>
+            </div>
+            <p>This is a REST API web application for managing communication between the androind application and the raspberry pi script. </p>
+        </article>
+        <article>
             <div class="img"><img src="{{url_for('static', filename='media/raspberry_P.png')}}" /></div>
             <div>
                 <h2>Raspberry Pi</h2>
@@ -54,16 +72,7 @@
 
             <p>This script is installed in any raspberry pi's device. Upon running, the script first check if the raspberry has been registered to the server then logs in. Otherwise, it connects to the server to register. After that, it keeps checking for new commands to execute them.</p>
         </article>
-        <article>
-            <div class="img"><img src="{{url_for('static', filename='media/server.png')}}" /></div>
-            <div>
-                <h2>Web Application</h2>
-                <a href="https://github.com/reem-codes/gp_api">
-                    <ion-icon name="logo-github"></ion-icon>
-                </a>
-            </div>
-            <p>This is a REST API web application for managing communication between the androind application and the raspberry pi script. </p>
-        </article>
+
     </div>
 </section>
 <svg style="transform: rotate(180deg)" viewbox="0 0 100 25">
@@ -156,5 +165,13 @@
     <p>&copy;{{now.year}} <a href="https://reem-codes.com">reem-codes</a>. All rights reserved.</p>
 </footer>
 <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#display-menu").click(function(){
+            $(this).toggleClass("change");
+            $("body > header nav").toggleClass("display");
+        });
+    });
+</script>
 </body>
 </html>
